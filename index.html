@@ -6,104 +6,100 @@
   <title>CRYPTO JIB - Airdrop Directory</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@600;700&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --crypto-purple: #8A2BE2;
-      --crypto-blue: #00D1FF;
-      --crypto-pink: #FF10F0;
-      --crypto-green: #00FFAA;
-      --dark-bg: #0F0F1A;
-      --card-bg: #1E1E2D;
-      --ad-placeholder-bg: rgba(255, 215, 0, 0.1);
+      --primary-color: #6a11cb;
+      --secondary-color: #2575fc;
+      --card-bg: #f8f9fa;
+      --text-color: #333;
+      --hover-effect: rgba(106, 17, 203, 0.1);
+      --telegram-color: #0088cc;
+      --whatsapp-color: #25D366;
+      --twitter-color: #1DA1F2;
+      --youtube-color: #FF0000;
     }
 
     body {
-      font-family: 'Roboto', sans-serif;
-      background-color: var(--dark-bg);
-      color: white;
+      font-family: 'Poppins', sans-serif;
+      background: rgba(135, 11, 207, 0.849);
+      color: var(--text-color);
       margin: 0;
       padding: 0;
+      min-height: 100vh;
     }
 
     h1, h2, h3 {
       font-family: 'Kanit', sans-serif;
       text-transform: uppercase;
       letter-spacing: 1px;
+      font-weight: 700;
     }
 
     .hero {
-      background: linear-gradient(135deg, var(--crypto-purple), var(--dark-bg));
-      padding: 100px 0;
+      padding: 80px 0;
       text-align: center;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 4rem;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .airdrop-card {
       background: var(--card-bg);
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 15px;
+      padding: 25px;
       margin-bottom: 20px;
-      transition: transform 0.3s;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      height: 100%;
+      transition: all 0.3s;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffffff 0%, #f1f3f9 100%);
     }
 
     .airdrop-card:hover {
       transform: translateY(-5px);
-      border-color: var(--crypto-blue);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+      background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    }
+
+    .airdrop-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
     }
 
     .airdrop-logo {
-      width: 60px;
-      height: 60px;
+      width: 70px;
+      height: 70px;
       object-fit: contain;
       border-radius: 50%;
       margin-bottom: 15px;
-    }
-
-    .ad-container {
-      background: var(--ad-placeholder-bg);
-      border: 2px dashed var(--crypto-green);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 30px 0;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s;
-    }
-
-    .ad-container:hover {
-      background: rgba(255, 215, 0, 0.2);
-    }
-
-    .ad-container img {
-      max-width: 100%;
-      max-height: 150px;
-      margin-bottom: 15px;
-      border-radius: 5px;
-    }
-
-    .filter-btn {
-      background: transparent;
-      color: white;
-      border: 1px solid var(--crypto-blue);
-      margin: 5px;
-      border-radius: 20px;
-    }
-
-    .filter-btn.active {
-      background: var(--crypto-blue);
-      color: black;
+      border: 2px solid rgba(106, 17, 203, 0.2);
+      background: white;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
     }
 
     .popular-badge {
       position: absolute;
       top: 10px;
       right: 10px;
-      background: var(--crypto-pink);
+      background: #FF10F0;
       color: white;
-      padding: 3px 8px;
-      border-radius: 10px;
+      padding: 5px 10px;
+      border-radius: 20px;
       font-size: 12px;
+      font-weight: 600;
     }
 
     .premium-badge {
@@ -112,21 +108,238 @@
       left: 10px;
       background: linear-gradient(45deg, #FFD700, #FFA500);
       color: black;
-      padding: 3px 8px;
-      border-radius: 10px;
+      padding: 5px 10px;
+      border-radius: 20px;
       font-size: 12px;
+      font-weight: 600;
+    }
+
+    .search-container {
+      max-width: 600px;
+      margin: 0 auto 40px;
+      position: relative;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 12px 20px 12px 45px;
+      border-radius: 30px;
+      border: 1px solid #ddd;
+      background: white;
+      color: #333;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+
+    #searchInput:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #777;
+    }
+
+    .filter-btn {
+      background: white;
+      color: #333;
+      border: 1px solid #ddd;
+      margin: 5px;
+      border-radius: 30px;
+      padding: 8px 20px;
+      transition: all 0.3s;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .filter-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      font-weight: 600;
+      border-color: transparent;
+      box-shadow: 0 4px 8px rgba(106, 17, 203, 0.3);
+    }
+
+    .filter-btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      border: none;
+      padding: 10px 20px;
+      font-weight: 600;
+      transition: all 0.3s;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5a0db3 0%, #1a65e0 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(106, 17, 203, 0.4);
+      color: white;
+    }
+
+    .ad-container {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      text-align: center;
+      transition: all 0.3s;
+      border: 2px dashed #ddd;
+    }
+
+    .ad-container.has-ad {
+      background: rgba(255, 215, 0, 0.05);
+      border: 2px solid rgba(255, 215, 0, 0.3);
+    }
+
+    .ad-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .ad-container img {
+      max-width: 100%;
+      max-height: 150px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .social-footer {
+      background: #f8f9fa;
+      padding: 60px 0;
+      margin-top: 80px;
+      border-top: 1px solid #eee;
+    }
+
+    .social-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 10px;
+      font-size: 24px;
+      color: white;
+      transition: all 0.3s;
+      box-shadow: 0 3px 5px rgba(0,0,0,0.1);
+    }
+
+    .social-icon.telegram {
+      background: var(--telegram-color);
+    }
+
+    .social-icon.whatsapp {
+      background: var(--whatsapp-color);
+    }
+
+    .social-icon.twitter {
+      background: var(--twitter-color);
+    }
+
+    .social-icon.youtube {
+      background: var(--youtube-color);
+    }
+
+    .social-icon:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .copyright {
+      color: #777;
+      margin-top: 30px;
+      font-size: 0.9rem;
+    }
+
+    .donate-section, .contact-section {
+      background: #f8f9fa;
+      border-radius: 15px;
+      padding: 30px;
+      margin: 30px 0;
+    }
+
+    .section-title {
+      color: var(--primary-color);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .wallet-address {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      border: 1px solid #eee;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .wallet-address code {
+      font-size: 0.9rem;
+      word-break: break-all;
+    }
+
+    .copy-btn {
+      background: #f1f3f9;
+      border: none;
+      border-radius: 5px;
+      padding: 5px 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .copy-btn:hover {
+      background: #e9ecef;
+    }
+
+    .email-link {
+      color: var(--primary-color);
+      font-weight: 500;
+      text-decoration: none;
+    }
+
+    .email-link:hover {
+      text-decoration: underline;
     }
 
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.5rem; }
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .wallet-address {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
     }
   </style>
 </head>
 <body>
   <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background: rgba(15, 15, 26, 0.9);">
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);">
     <div class="container">
-      <a class="navbar-brand" href="#">CRYPTO JIB</a>
+      <a class="navbar-brand" href="#" style="font-family: 'Kanit', sans-serif; font-weight: 700; font-size: 1.8rem;">
+        CRYPTO JIB
+      </a>
     </div>
   </nav>
 
@@ -140,13 +353,19 @@
 
   <!-- MAIN CONTENT -->
   <main class="container py-5">
+    <!-- Search Bar -->
+    <div class="search-container">
+      <i class="fas fa-search"></i>
+      <input type="text" id="searchInput" placeholder="Search airdrops...">
+    </div>
+
     <!-- Filter Buttons -->
     <div class="text-center mb-4">
       <button class="filter-btn btn active" data-filter="all">All</button>
-      <button class="filter-btn btn" data-filter="mining"><i class="fas fa-microchip"></i> Mining</button>
-      <button class="filter-btn btn" data-filter="nodes"><i class="fas fa-server"></i> Nodes</button>
-      <button class="filter-btn btn" data-filter="testnets"><i class="fas fa-flask"></i> Testnets</button>
-      <button class="filter-btn btn" data-filter="telegram"><i class="fab fa-telegram"></i> Telegram</button>
+      <button class="filter-btn btn" data-filter="mining">Mining</button>
+      <button class="filter-btn btn" data-filter="nodes">Nodes</button>
+      <button class="filter-btn btn" data-filter="testnets">Testnets</button>
+      <button class="filter-btn btn" data-filter="telegram">Telegram</button>
     </div>
 
     <!-- Airdrops Grid -->
@@ -154,104 +373,115 @@
       <!-- Airdrops will load here -->
     </div>
 
-    <!-- Ad Slot 1 -->
-    <div id="ad-slot-1" class="ad-container" onclick="handleAdClick(1)">
-      <h5><i class="fas fa-ad"></i> ADVERTISEMENT SPACE</h5>
-      <p id="ad-content-1">Put your ad here</p>
-      <small>Click to advertise with us</small>
+    <!-- Ad Spaces -->
+    <div class="row mt-4" id="ad-spaces">
+      <!-- Ads will load here -->
     </div>
 
-    <!-- More content can go here -->
-    
-    <!-- Ad Slot 2 -->
-    <div id="ad-slot-2" class="ad-container" onclick="handleAdClick(2)">
-      <h5><i class="fas fa-ad"></i> ADVERTISEMENT SPACE</h5>
-      <p id="ad-content-2">Put your ad here</p>
-      <small>Click to advertise with us</small>
+    <!-- Donate Section -->
+    <div class="donate-section">
+      <h3 class="section-title"><i class="fas fa-heart" style="color: #ff4757;"></i> Donate</h3>
+      <div class="wallet-address">
+        <div>
+          <strong>ETH:</strong>
+          <code id="eth-address">0x611A487cb20Bb1E634518086B1fED3cEFe9D582D</code>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('eth-address')">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+      <div class="wallet-address">
+        <div>
+          <strong>BTC:</strong>
+          <code id="btc-address">bc1qfzj96th8u4lspd4zp5ve948mrk45t57258h2zg</code>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('btc-address')">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+      <div class="wallet-address">
+        <div>
+          <strong>BNB:</strong>
+          <code id="bnb-address">0x611A487cb20Bb1E634518086B1fED3cEFe9D582D</code>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('bnb-address')">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+        <div class="wallet-address">
+        <div>
+          <strong>SOL:</strong>
+          <code id="sol-address">4Lm2kBpouz99CsZDJuACWaGyoCc4kx6CshVTaNFnfHr5</code>
+        </div>
+        <button class="copy-btn" onclick="copyToClipboard('sol-address')">
+          <i class="far fa-copy"></i> Copy
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Section -->
+    <div class="contact-section">
+      <h3 class="section-title"><i class="fas fa-envelope" style="color: #6a11cb;"></i> Contact Us</h3>
+      <p>Have questions or suggestions? Reach out to us:</p>
+      <p>
+        <a href="mailto:cryptojared125@gmail.com" class="email-link">
+          cryptojared125@gmail.com
+        </a>
+      </p>
     </div>
   </main>
 
-  <!-- Bootstrap & Custom JS -->
+  <!-- FOOTER -->
+  <footer class="social-footer text-center">
+    <div class="container">
+      <h3>Follow Us</h3>
+      <div class="my-4">
+        <a href="https://t.me/cryptojibchannel" class="social-icon telegram" target="_blank">
+          <i class="fab fa-telegram"></i>
+        </a>
+        <a href="https://www.whatsapp.com/channel/0029VaS8Re39hXF0RBIi661C" class="social-icon whatsapp" target="_blank">
+          <i class="fab fa-whatsapp"></i>
+        </a>
+        <a href="https://x.com/crypto_jib" class="social-icon twitter" target="_blank">
+          <i class="fab fa-twitter"></i>
+        </a>
+        <a href="https://www.youtube.com/channel/UCYdGd9jfuoINVAC9BA2tLBQ" class="social-icon youtube" target="_blank">
+          <i class="fab fa-youtube"></i>
+        </a>
+      </div>
+      <p class="copyright">© 2025 CRYPTO JIB. All rights reserved.</p>
+    </div>
+  </footer>
+
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   <script>
     // Configuration
-    const AD_APPLICATION_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSeH8sa9XpLSuFSOnuQ-Rtc9hqnqHpHfJCm8x84dO-NvWqDJmQ/viewform?usp=sharing";
     const HOT_THRESHOLD = 15; // Clicks needed to be "popular"
+    const AD_APPLICATION_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSeH8sa9XpLSuFSOnuQ-Rtc9hqnqHpHfJCm8x84dO-NvWqDJmQ/viewform?usp=sharing";
     
-    // Load active ads from storage
-    function loadActiveAds() {
-      const now = Date.now();
-      const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
-      
-      // Filter out expired ads and sort by newest first
-      const activeAds = ads
-        .filter(ad => ad.expires > now)
-        .sort((a, b) => b.expires - a.expires);
-      
-      return activeAds;
-    }
-
-    // Display ads in available slots
-    function displayAds() {
-      const activeAds = loadActiveAds();
-      const adSlots = [1, 2]; // We have 2 ad slots
-      
-      adSlots.forEach(slot => {
-        const adContainer = document.getElementById(`ad-slot-${slot}`);
-        const adContent = document.getElementById(`ad-content-${slot}`);
-        
-        if (activeAds.length >= slot) {
-          // Show actual ad
-          const ad = activeAds[slot - 1];
-          adContainer.innerHTML = `
-            <h5><i class="fas fa-ad"></i> ${ad.title}</h5>
-            ${ad.image ? `<img src="${ad.image}" alt="${ad.title}">` : ''}
-            <p>${ad.content}</p>
-            <a href="${ad.url}" target="_blank" class="btn btn-sm btn-warning">CLICK HERE</a>
-          `;
-          
-          // Track clicks
-          adContainer.onclick = function(e) {
-            if (!e.target.tagName === 'A') {
-              window.open(ad.url, '_blank');
-              trackAdClick(ad.id);
-            }
-          };
-        } else {
-          // Show placeholder
-          adContainer.onclick = function() {
-            window.open(AD_APPLICATION_FORM, '_blank');
-          };
-        }
-      });
-    }
-
-    // Track ad clicks
-    function trackAdClick(adId) {
-      const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
-      const adIndex = ads.findIndex(ad => ad.id == adId);
-      
-      if (adIndex !== -1) {
-        ads[adIndex].clicks = (ads[adIndex].clicks || 0) + 1;
-        localStorage.setItem('cryptojib_ads', JSON.stringify(ads));
-      }
-    }
-
-    // Load and display airdrops
-    function loadAirdrops(filter = "all") {
+    // Load data from localStorage
+    function loadAirdrops(filter = "all", searchTerm = "") {
       const grid = document.getElementById("airdrops-grid");
       const airdrops = JSON.parse(localStorage.getItem('cryptojib_airdrops')) || [];
       const stats = JSON.parse(localStorage.getItem('airdrop_stats')) || {};
       
       // Filter airdrops
-      const filteredData = filter === "all" 
+      let filteredData = filter === "all" 
         ? airdrops 
         : airdrops.filter(item => item.category === filter);
+      
+      // Apply search
+      if (searchTerm) {
+        const term = searchTerm.toLowerCase();
+        filteredData = filteredData.filter(item => 
+          item.name.toLowerCase().includes(term) || 
+          (item.description && item.description.toLowerCase().includes(term)))
+      }
       
       grid.innerHTML = '';
       
       if (filteredData.length === 0) {
-        grid.innerHTML = '<div class="col-12 text-center py-5"><h4>No airdrops found. Check back later!</h4></div>';
+        grid.innerHTML = '<div class="col-12 text-center py-5"><h4>No airdrops found</h4></div>';
         return;
       }
       
@@ -262,12 +492,12 @@
         if (!isExpired) {
           grid.innerHTML += `
             <div class="col-md-3 mb-4">
-              <div class="airdrop-card" style="position:relative;">
-                ${item.isPremium ? `<span class="premium-badge"><i class="fas fa-crown"></i> PREMIUM</span>` : ''}
-                ${isPopular ? `<span class="popular-badge"><i class="fas fa-fire"></i> HOT</span>` : ''}
-                <img src="${item.logo}" alt="${item.name}" class="airdrop-logo">
+              <div class="airdrop-card h-100">
+                ${item.isPremium ? `<span class="premium-badge">PREMIUM</span>` : ''}
+                ${isPopular ? `<span class="popular-badge">HOT</span>` : ''}
+                ${item.logo ? `<img src="${item.logo}" class="airdrop-logo" onerror="this.style.display='none'">` : ''}
                 <h4>${item.name}</h4>
-                <a href="${item.link}" target="_blank" class="btn btn-sm btn-primary w-100" onclick="trackAirdropClick(${item.id})">
+                <a href="${item.link}" target="_blank" class="btn btn-primary w-100" onclick="trackAirdropClick(${item.id})">
                   Join Airdrop
                 </a>
                 ${item.description ? `<p class="mt-2 small">${item.description}</p>` : ''}
@@ -278,36 +508,117 @@
         }
       });
     }
-
+    
+    // Load ads
+    function loadAds() {
+      const container = document.getElementById("ad-spaces");
+      const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
+      const now = Date.now();
+      
+      // Filter active ads (not expired)
+      const activeAds = ads.filter(ad => ad.expires > now)
+                         .sort((a, b) => b.expires - a.expires);
+      
+      container.innerHTML = '';
+      
+      // Always show at least one ad space
+      if (activeAds.length === 0) {
+        container.innerHTML = `
+          <div class="col-12 mb-4">
+            <div class="ad-container" onclick="window.open('${AD_APPLICATION_FORM}', '_blank')">
+              <h5><i class="fas fa-ad"></i> Ad Space Available</h5>
+              <p>Your ad could be here</p>
+              <button class="btn btn-sm btn-outline-primary mt-2">Apply to Advertise</button>
+            </div>
+          </div>
+        `;
+      } else {
+        // Show active ads
+        activeAds.forEach(ad => {
+          container.innerHTML += `
+            <div class="col-md-6 col-lg-4 mb-4">
+              <div class="ad-container has-ad" onclick="trackAdClick(${ad.id})">
+                ${ad.image ? `<img src="${ad.image}" onerror="this.style.display='none'">` : ''}
+                <h5>${ad.title}</h5>
+                <p>${ad.content}</p>
+                <a href="${ad.url}" target="_blank" class="btn btn-sm btn-warning">Learn More</a>
+              </div>
+            </div>
+          `;
+        });
+        
+        // Add the application ad space if we have at least one active ad
+        container.innerHTML += `
+          <div class="col-md-6 col-lg-4 mb-4">
+            <div class="ad-container" onclick="window.open('${AD_APPLICATION_FORM}', '_blank')">
+              <h5><i class="fas fa-ad"></i> Advertise With Us</h5>
+              <p>Promote your project to our audience</p>
+              <button class="btn btn-sm btn-outline-primary mt-2">Apply Now</button>
+            </div>
+          </div>
+        `;
+      }
+    }
+    
     // Track airdrop clicks
     function trackAirdropClick(id) {
       const stats = JSON.parse(localStorage.getItem('airdrop_stats')) || {};
       stats[id] = (stats[id] || 0) + 1;
       localStorage.setItem('airdrop_stats', JSON.stringify(stats));
     }
-
-    // Handle ad placeholder clicks
-    function handleAdClick(slotNumber) {
-      const activeAds = loadActiveAds();
-      if (activeAds.length < slotNumber) {
-        window.open(AD_APPLICATION_FORM, '_blank');
+    
+    // Track ad clicks
+    function trackAdClick(id) {
+      const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
+      const adIndex = ads.findIndex(ad => ad.id == id);
+      
+      if (adIndex !== -1) {
+        ads[adIndex].clicks = (ads[adIndex].clicks || 0) + 1;
+        localStorage.setItem('cryptojib_ads', JSON.stringify(ads));
+        window.open(ads[adIndex].url, '_blank');
       }
     }
-
+    
+    // Copy wallet address to clipboard
+    function copyToClipboard(id) {
+      const element = document.getElementById(id);
+      const text = element.textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const originalText = element.textContent;
+        element.textContent = 'Copied!';
+        setTimeout(() => {
+          element.textContent = originalText;
+        }, 2000);
+      });
+    }
+    
     // Initialize the page
     document.addEventListener('DOMContentLoaded', function() {
-      // Load and display content
+      // Load initial data
       loadAirdrops();
-      displayAds();
+      loadAds();
       
       // Set up filter buttons
       document.querySelectorAll(".filter-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
           btn.classList.add("active");
-          loadAirdrops(btn.dataset.filter);
+          const searchTerm = document.getElementById('searchInput').value;
+          loadAirdrops(btn.dataset.filter, searchTerm);
         });
       });
+      
+      // Set up search
+      document.getElementById('searchInput').addEventListener('input', function() {
+        const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+        loadAirdrops(activeFilter, this.value);
+      });
+
+      // Refresh data every 30 seconds
+      setInterval(() => {
+        loadAirdrops();
+        loadAds();
+      }, 30000);
     });
   </script>
 </body>
