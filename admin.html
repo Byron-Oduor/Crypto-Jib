@@ -29,8 +29,8 @@
       flex-direction: column;
       position: relative;
       overflow-x: hidden;
-      background-color: var(--dark-bg);
-    }
+      -color: var(--dark-bg);
+    }background
 
     .background-elements {
       position: fixed;
@@ -88,7 +88,7 @@
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      background-color: rgba(15, 15, 26, 0.8);
+      background-color: rgba(183, 224, 117, 0.8);
       backdrop-filter: blur(5px);
     }
 
@@ -189,6 +189,26 @@
       animation: shine 3s infinite;
     }
 
+    #save-ad-btn {
+      background: linear-gradient(45deg, var(--crypto-purple), var(--crypto-pink));
+      border: none;
+      border-radius: 8px;
+      padding: 12px 24px;
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      color: white;
+      transition: all 0.3s;
+    }
+
+    #save-ad-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 209, 255, 0.4);
+    }
+
+    #save-ad-btn:active {
+      transform: translateY(0);
+    }
+
     .stat-card {
       background: rgba(0,0,0,0.2);
       border-left: 4px solid var(--crypto-blue);
@@ -241,6 +261,9 @@
       .login-card {
         padding: 1.5rem;
         margin: 15px;
+      }
+      #save-ad-btn {
+        width: 100%;
       }
     }
   </style>
@@ -385,16 +408,16 @@
           <div class="admin-card mt-4">
             <h4><i class="fas fa-plus"></i> Create New Ad</h4>
             <div class="mb-3">
-              <label class="form-label">Ad Title</label>
-              <input type="text" id="ad-title" class="form-control">
+              <label class="form-label">Ad Title*</label>
+              <input type="text" id="ad-title" class="form-control" required>
             </div>
             <div class="mb-3">
-              <label class="form-label">Ad Content (Text)</label>
-              <textarea id="ad-content" class="form-control" rows="3"></textarea>
+              <label class="form-label">Ad Content*</label>
+              <textarea id="ad-content" class="form-control" rows="3" required></textarea>
             </div>
             <div class="mb-3">
-              <label class="form-label">Destination URL</label>
-              <input type="url" id="ad-url" class="form-control" placeholder="https://">
+              <label class="form-label">Destination URL*</label>
+              <input type="url" id="ad-url" class="form-control" placeholder="https://" required>
             </div>
             <div class="mb-3">
               <label class="form-label">Ad Image (Optional)</label>
@@ -402,10 +425,10 @@
               <small class="text-muted">Recommended size: 300x250px</small>
             </div>
             <div class="mb-3">
-              <label class="form-label">Display Period (Days)</label>
-              <input type="number" id="ad-duration" class="form-control" value="7" min="1">
+              <label class="form-label">Display Period (Days)*</label>
+              <input type="number" id="ad-duration" class="form-control" value="7" min="1" required>
             </div>
-            <button id="save-ad-btn" class="btn btn-primary">
+            <button id="save-ad-btn" class="btn btn-primary w-100">
               <i class="fas fa-save"></i> Save Ad
             </button>
           </div>
@@ -441,25 +464,23 @@
     // ===== CONFIGURATION =====
     const ADMIN_PASSWORD = "Commando254";
     const AD_APPLICATION_FORM = "https://docs.google.com/forms/d/e/1FAIpQLSeH8sa9XpLSuFSOnuQ-Rtc9hqnqHpHfJCm8x84dO-NvWqDJmQ/viewform?usp=sharing";
+    const HOT_THRESHOLD = 15;
     let currentEditId = null;
     let currentAdEditId = null;
+    let currentLogoData = null;
+    let currentAdImageData = null;
 
     // ===== INITIALIZE =====
     document.addEventListener('DOMContentLoaded', function() {
-      // Create particles
       createParticles();
-      
-      // Setup login functionality
       setupLogin();
       
-      // Check if already logged in
       if (localStorage.getItem('admin_loggedIn') === 'true') {
         document.getElementById('login-screen').style.display = 'none';
         document.getElementById('main-dashboard').style.display = 'block';
         loadData();
       }
       
-      // Initialize form event listeners
       setupEventListeners();
     });
 
@@ -474,7 +495,6 @@
         const particle = document.createElement('div');
         particle.classList.add('particle');
         
-        // Random properties
         const size = Math.random() * 3 + 1;
         const posX = Math.random() * window.innerWidth;
         const posY = Math.random() * window.innerHeight;
@@ -482,7 +502,6 @@
         const delay = Math.random() * 5;
         const opacity = Math.random() * 0.5 + 0.1;
         
-        // Apply styles
         particle.style.width = `${size}px`;
         particle.style.height = `${size}px`;
         particle.style.left = `${posX}px`;
@@ -490,7 +509,6 @@
         particle.style.opacity = opacity;
         particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
         
-        // Random color
         const colors = ['rgba(0, 243, 255, 0.6)', 'rgba(255, 0, 228, 0.6)', 'rgba(179, 0, 255, 0.6)'];
         particle.style.background = colors[Math.floor(Math.random() * colors.length)];
         
@@ -507,14 +525,12 @@
         const errorMsg = document.getElementById('login-error');
         
         if (password === ADMIN_PASSWORD) {
-          // Successful login
           localStorage.setItem('admin_loggedIn', 'true');
           document.getElementById('login-screen').style.display = 'none';
           document.getElementById('main-dashboard').style.display = 'block';
           errorMsg.classList.add('d-none');
           loadData();
         } else {
-          // Failed login
           errorMsg.classList.remove('d-none');
           document.getElementById('login-screen').style.animation = 'shake 0.5s';
           setTimeout(() => {
@@ -536,11 +552,42 @@
 
     function setupEventListeners() {
       // Airdrop form
-      document.getElementById('logo-upload').addEventListener('change', handleLogoUpload);
+      document.getElementById('logo-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('logo-preview');
+        
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            preview.src = event.target.result;
+            preview.classList.remove('d-none');
+            currentLogoData = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          preview.src = '#';
+          preview.classList.add('d-none');
+          currentLogoData = null;
+        }
+      });
+      
       document.getElementById('save-airdrop-btn').addEventListener('click', saveAirdrop);
       document.getElementById('cancel-edit-btn').addEventListener('click', resetAirdropForm);
       
       // Ad form
+      document.getElementById('ad-image').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function(event) {
+            currentAdImageData = event.target.result;
+          };
+          reader.readAsDataURL(file);
+        } else {
+          currentAdImageData = null;
+        }
+      });
+      
       document.getElementById('save-ad-btn').addEventListener('click', saveAd);
     }
 
@@ -551,21 +598,52 @@
     }
 
     // ===== AIRDROP MANAGEMENT =====
-    function handleLogoUpload(e) {
-      const file = e.target.files[0];
-      const preview = document.getElementById('logo-preview');
+    function saveAirdrop() {
+      const name = document.getElementById('airdrop-name').value.trim();
+      const link = document.getElementById('airdrop-link').value.trim();
+      const description = document.getElementById('airdrop-description').value.trim();
+      const category = document.getElementById('airdrop-category').value;
+      const isPremium = document.getElementById('airdrop-premium').checked;
+      const endDate = document.getElementById('airdrop-enddate').value;
       
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          preview.src = event.target.result;
-          preview.classList.remove('d-none');
-        };
-        reader.readAsDataURL(file);
-      } else {
-        preview.src = '#';
-        preview.classList.add('d-none');
+      if (!name || !link) {
+        alert('Please fill in all required fields (Name and Link)');
+        return;
       }
+      
+      let airdrops = JSON.parse(localStorage.getItem('cryptojib_airdrops')) || [];
+      
+      if (currentEditId) {
+        const index = airdrops.findIndex(a => a.id == currentEditId);
+        if (index !== -1) {
+          airdrops[index] = {
+            ...airdrops[index],
+            name,
+            link,
+            description: description || null,
+            category,
+            isPremium,
+            endDate: endDate || null,
+            logo: currentLogoData || airdrops[index].logo
+          };
+        }
+      } else {
+        airdrops.push({
+          id: Date.now(),
+          name,
+          link,
+          description: description || null,
+          category,
+          isPremium,
+          endDate: endDate || null,
+          logo: currentLogoData || ''
+        });
+      }
+      
+      localStorage.setItem('cryptojib_airdrops', JSON.stringify(airdrops));
+      loadAirdrops();
+      resetAirdropForm();
+      alert('Airdrop saved successfully!');
     }
 
     function loadAirdrops() {
@@ -583,7 +661,7 @@
       airdrops.forEach(airdrop => {
         const row = document.createElement('tr');
         row.innerHTML = `
-          <td><img src="${airdrop.logo}" width="40" height="40" style="object-fit: contain;"></td>
+          <td><img src="${airdrop.logo}" width="40" height="40" style="object-fit: contain;" onerror="this.style.display='none'"></td>
           <td>${airdrop.name}</td>
           <td>${airdrop.category}</td>
           <td>${airdrop.isPremium ? '<span class="badge bg-warning">Premium</span>' : '<span class="badge bg-primary">Standard</span>'}</td>
@@ -599,7 +677,6 @@
         tbody.appendChild(row);
       });
       
-      // Add event listeners to new buttons
       document.querySelectorAll('.edit-airdrop').forEach(btn => {
         btn.addEventListener('click', function() {
           editAirdrop(this.dataset.id);
@@ -630,67 +707,18 @@
       document.getElementById('airdrop-enddate').value = airdrop.endDate || '';
       
       const preview = document.getElementById('logo-preview');
-      if (airdrop.logo && airdrop.logo.includes('data:image')) {
+      if (airdrop.logo) {
         preview.src = airdrop.logo;
         preview.classList.remove('d-none');
+        currentLogoData = airdrop.logo;
       } else {
         preview.src = '#';
         preview.classList.add('d-none');
+        currentLogoData = null;
       }
       
       document.getElementById('cancel-edit-btn').classList.remove('d-none');
       document.getElementById('save-airdrop-btn').innerHTML = '<i class="fas fa-save"></i> Update';
-    }
-
-    function saveAirdrop() {
-      const name = document.getElementById('airdrop-name').value.trim();
-      const link = document.getElementById('airdrop-link').value.trim();
-      const description = document.getElementById('airdrop-description').value.trim();
-      const category = document.getElementById('airdrop-category').value;
-      const isPremium = document.getElementById('airdrop-premium').checked;
-      const endDate = document.getElementById('airdrop-enddate').value;
-      const logo = document.getElementById('logo-preview').src;
-      
-      if (!name || !link) {
-        alert('Please fill in all required fields (Name and Link)');
-        return;
-      }
-      
-      let airdrops = JSON.parse(localStorage.getItem('cryptojib_airdrops')) || [];
-      
-      if (currentEditId) {
-        // Update existing airdrop
-        const index = airdrops.findIndex(a => a.id == currentEditId);
-        if (index !== -1) {
-          airdrops[index] = {
-            ...airdrops[index],
-            name,
-            link,
-            description: description || null,
-            category,
-            isPremium,
-            endDate: endDate || null,
-            logo: logo.includes('data:image') ? logo : airdrops[index].logo
-          };
-        }
-      } else {
-        // Add new airdrop
-        airdrops.push({
-          id: Date.now(),
-          name,
-          link,
-          description: description || null,
-          category,
-          isPremium,
-          endDate: endDate || null,
-          logo: logo.includes('data:image') ? logo : ''
-        });
-      }
-      
-      localStorage.setItem('cryptojib_airdrops', JSON.stringify(airdrops));
-      loadAirdrops();
-      resetAirdropForm();
-      alert('Airdrop saved successfully!');
     }
 
     function deleteAirdrop(id) {
@@ -714,9 +742,65 @@
       document.getElementById('cancel-edit-btn').classList.add('d-none');
       document.getElementById('save-airdrop-btn').innerHTML = '<i class="fas fa-save"></i> Save';
       currentEditId = null;
+      currentLogoData = null;
     }
 
     // ===== AD MANAGEMENT =====
+    function saveAd() {
+      const title = document.getElementById('ad-title').value.trim();
+      const content = document.getElementById('ad-content').value.trim();
+      const url = document.getElementById('ad-url').value.trim();
+      const duration = parseInt(document.getElementById('ad-duration').value) || 7;
+      
+      // Validate required fields
+      if (!title) {
+        alert('Please enter an ad title');
+        return;
+      }
+      if (!content) {
+        alert('Please enter ad content');
+        return;
+      }
+      if (!url || !url.startsWith('http')) {
+        alert('Please enter a valid URL starting with http:// or https://');
+        return;
+      }
+      if (isNaN(duration) || duration < 1) {
+        alert('Please enter a valid duration (at least 1 day)');
+        return;
+      }
+
+      const adData = {
+        id: currentAdEditId || Date.now(),
+        title,
+        content,
+        url,
+        expires: Date.now() + (duration * 24 * 60 * 60 * 1000),
+        clicks: 0,
+        image: currentAdImageData || null
+      };
+
+      saveAdToStorage(adData);
+    }
+
+    function saveAdToStorage(adData) {
+      let ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
+      
+      if (currentAdEditId) {
+        const index = ads.findIndex(ad => ad.id == currentAdEditId);
+        if (index !== -1) {
+          ads[index] = adData;
+        }
+      } else {
+        ads.push(adData);
+      }
+      
+      localStorage.setItem('cryptojib_ads', JSON.stringify(ads));
+      loadAds();
+      resetAdForm();
+      alert('Ad successfully saved!');
+    }
+
     function loadAds() {
       const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
       const container = document.getElementById('current-ads');
@@ -755,7 +839,6 @@
         container.appendChild(adElement);
       });
       
-      // Add event listeners to new buttons
       document.querySelectorAll('.edit-ad').forEach(btn => {
         btn.addEventListener('click', function() {
           editAd(this.dataset.id);
@@ -782,72 +865,13 @@
       document.getElementById('ad-content').value = ad.content;
       document.getElementById('ad-url').value = ad.url;
       
-      // Calculate remaining days
       const expires = new Date(ad.expires);
       const today = new Date();
       const diffTime = expires - today;
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
       document.getElementById('ad-duration').value = diffDays > 0 ? diffDays : 1;
-    }
-
-    function saveAd() {
-      const title = document.getElementById('ad-title').value.trim();
-      const content = document.getElementById('ad-content').value.trim();
-      const url = document.getElementById('ad-url').value.trim();
-      const duration = parseInt(document.getElementById('ad-duration').value) || 7;
-      const imageFile = document.getElementById('ad-image').files[0];
       
-      if (!title || !content || !url) {
-        alert('Please fill in all required fields (Title, Content, and URL)');
-        return;
-      }
-      
-      if (imageFile) {
-        const reader = new FileReader();
-        reader.onload = function(event) {
-          saveAdToStorage(event.target.result);
-        };
-        reader.readAsDataURL(imageFile);
-      } else {
-        saveAdToStorage(null);
-      }
-      
-      function saveAdToStorage(imageData) {
-        let ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
-        const expires = new Date();
-        expires.setDate(expires.getDate() + duration);
-        
-        if (currentAdEditId) {
-          // Update existing ad
-          const index = ads.findIndex(a => a.id == currentAdEditId);
-          if (index !== -1) {
-            ads[index] = {
-              ...ads[index],
-              title,
-              content,
-              url,
-              image: imageData || ads[index].image,
-              expires: expires.getTime()
-            };
-          }
-        } else {
-          // Add new ad
-          ads.push({
-            id: Date.now(),
-            title,
-            content,
-            url,
-            image: imageData || null,
-            expires: expires.getTime(),
-            clicks: 0
-          });
-        }
-        
-        localStorage.setItem('cryptojib_ads', JSON.stringify(ads));
-        loadAds();
-        resetAdForm();
-        alert('Ad saved successfully!');
-      }
+      currentAdImageData = ad.image || null;
     }
 
     function deleteAd(id) {
@@ -865,6 +889,7 @@
       document.getElementById('ad-image').value = '';
       document.getElementById('ad-duration').value = '7';
       currentAdEditId = null;
+      currentAdImageData = null;
     }
 
     // ===== ANALYTICS =====
@@ -873,7 +898,6 @@
       const stats = JSON.parse(localStorage.getItem('airdrop_stats')) || {};
       const ads = JSON.parse(localStorage.getItem('cryptojib_ads')) || [];
       
-      // Airdrop stats
       let airdropStatsHTML = `
         <div class="stat-card">
           <h5>Total Airdrops</h5>
@@ -889,7 +913,6 @@
         </div>
       `;
       
-      // Ad stats
       let adStatsHTML = `
         <div class="stat-card">
           <h5>Active Ads</h5>
@@ -911,12 +934,8 @@
         `;
       }
       
-      // Update DOM
-      const airdropStatsEl = document.getElementById('airdrop-stats');
-      const adStatsEl = document.getElementById('ad-stats');
-      
-      if (airdropStatsEl) airdropStatsEl.innerHTML = airdropStatsHTML;
-      if (adStatsEl) adStatsEl.innerHTML = adStatsHTML;
+      document.getElementById('airdrop-stats').innerHTML = airdropStatsHTML;
+      document.getElementById('ad-stats').innerHTML = adStatsHTML;
     }
 
     function getMostPopular(airdrops, stats) {
